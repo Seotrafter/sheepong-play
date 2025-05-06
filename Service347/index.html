@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheepong: Match-3 Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel='icon' href='/src/icons/logo.png' type='image/x-icon'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sheepong-orange': '#f89554',
+                        'sheepong-blue': '#426c79',
+                    },
+                    fontFamily: {
+                        'game': ['Nunito', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .glow {
+            box-shadow: 0 0 15px rgba(248, 149, 84, 0.5);
+        }
+
+        .hero-bg {
+            background-image: url('/src/img/hero.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                right: 0;
+                background-color: white;
+                width: 100%;
+                z-index: 50;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white overflow-x-hidden">
+    <!-- Header Section -->
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <nav class="flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl glow">
+                        🐑
+                    </div>
+                    <span class="text-sheepong-blue font-bold text-xl md:text-2xl">Sheepong: Match-3 Adventure</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Home</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Gallery</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Characters</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Reviews</a>
+                    <a href="/" class="bg-sheepong-orange text-white px-6 py-2 rounded-full font-bold hover:bg-opacity-90 transition duration-300 glow">Download</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-sheepong-blue focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden mobile-menu md:hidden">
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Home</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Features</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Gallery</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Characters</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Reviews</a>
+                <a href="/" class="block py-3 px-4 text-center bg-sheepong-orange text-white font-bold">Download</a>
+            </div>
+        </div>
+    </header>
+    <!-- Terms Header Section -->
+    <section class="py-24 bg-gradient-to-b from-sheepong-blue to-sheepong-blue/80 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Terms and Conditions</h1>
+                <p class="text-xl font-light">Sheepong: Match-3 Adventure</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-8">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            📜
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Welcome to Sheepong: Match-3 Adventure!</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        These terms and conditions outline the rules and regulations for the use of Sheepong: Match-3 Adventure's Website, located at https://sheepong-play.com/.
+                    </p>
+
+                    <div class="bg-sheepong-blue/10 rounded-2xl p-6 mb-8">
+                        <p class="text-sheepong-blue font-medium">
+                            By accessing this website, we assume you accept these terms and conditions. Do not continue to use Sheepong: Match-3 Adventure if you do not agree to take all of the terms and conditions stated on this page.
+                        </p>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        The following terminology applies to these Terms and Conditions, Privacy Statement, and Disclaimer Notice and all Agreements: "Client", "You", and "Your" refer to you, the person logging onto this website and compliant with the Company's terms and conditions. "The Company", "Ourselves", "We", "Our", and "Us" refer to our Company. "Party", "Parties", or "Us" refer to both the Client and ourselves. All terms refer to the offer, acceptance, and consideration of payment necessary to undertake the process of our assistance to the Client in the most appropriate manner for the express purpose of meeting the Client's needs in respect of the provision of the Company's stated services, in accordance with and subject to the prevailing law of the Netherlands. Any use of the above terminology or other words in the singular, plural, capitalization, and/or he/she or they, are taken as interchangeable and therefore as referring to the same.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cookies Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🍪
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Cookies</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        We employ the use of cookies. By accessing Sheepong: Match-3 Adventure, you agreed to use cookies in agreement with the Sheepong: Match-3 Adventure's Privacy Policy.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Most interactive websites use cookies to let us retrieve the user's details for each visit. Cookies are used by our website to enable the functionality of certain areas to make it easier for people visiting our website. Some of our affiliate/advertising partners may also use cookies.
+                    </p>
+
+                    <div class="border-l-4 border-sheepong-orange pl-6 py-2 mb-4">
+                        <a href="/cookie-policy" class="text-sheepong-orange hover:underline font-medium">Read our full Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- License Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            📝
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">License</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Unless otherwise stated, Sheepong: Match-3 Adventure and/or its licensors own the intellectual property rights for all material on Sheepong: Match-3 Adventure. All intellectual property rights are reserved. You may access this from Sheepong: Match-3 Adventure for your own personal use, subject to restrictions set in these terms and conditions.
+                    </p>
+
+                    <div class="bg-gray-50 rounded-2xl p-6 mb-6">
+                        <h3 class="text-xl font-bold text-sheepong-blue mb-4">You must not:</h3>
+                        <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                            <li>Republish material from Sheepong: Match-3 Adventure</li>
+                            <li>Sell, rent, or sub-license material from Sheepong: Match-3 Adventure</li>
+                            <li>Reproduce, duplicate, or copy material from Sheepong: Match-3 Adventure</li>
+                            <li>Redistribute content from Sheepong: Match-3 Adventure</li>
+                        </ul>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        This Agreement shall begin on the date hereof.
+                    </p>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Parts of this website offer an opportunity for users to post and exchange opinions and information in certain areas of the website. Sheepong: Match-3 Adventure does not filter, edit, publish, or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of Sheepong: Match-3 Adventure, its agents, and/or affiliates. Comments reflect the views and opinions of the person who posts them. To the extent permitted by applicable laws, Sheepong: Match-3 Adventure shall not be liable for the Comments or for any liability, damages, or expenses caused and/or suffered as a result of any use of and/or posting of and/or appearance of the Comments on this website.
+                    </p>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Sheepong: Match-3 Adventure reserves the right to monitor all Comments and to remove any Comments which can be considered inappropriate, offensive, or cause a breach of these Terms and Conditions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Warranties Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            ✅
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">User Warranties</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        You warrant and represent that:
+                    </p>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">You are entitled to post the Comments on our website and have all necessary licenses and consents to do so;</p>
+                        </div>
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">The Comments do not invade any intellectual property right, including without limitation copyright, patent, or trademark of any third party;</p>
+                        </div>
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">The Comments do not contain any defamatory, libelous, offensive, indecent, or otherwise unlawful material which is an invasion of privacy;</p>
+                        </div>
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">The Comments will not be used to solicit or promote business, custom, or present commercial activities or unlawful activity.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-sheepong-orange/10 rounded-2xl p-6">
+                        <p class="text-sheepong-blue font-medium">
+                            You hereby grant Sheepong: Match-3 Adventure a non-exclusive license to use, reproduce, edit, and authorize others to use, reproduce, and edit any of your Comments in any and all forms, formats, or media.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hyperlinking Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🔗
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Hyperlinking to our Content</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        The following organizations may link to our Website without prior written approval:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">🏛️</span>
+                            <span class="text-gray-700">Government agencies</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">🔍</span>
+                            <span class="text-gray-700">Search engines</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">📰</span>
+                            <span class="text-gray-700">News organizations</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">📒</span>
+                            <span class="text-gray-700">Online directory distributors</span>
+                        </div>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        These organizations may link to our home page, publications, or other Website information so long as the link:
+                        (a) is not in any way deceptive;
+                        (b) does not falsely imply sponsorship, endorsement, or approval of the linking party and its products and/or services; and
+                        (c) fits within the context of the linking party's site.
+                    </p>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        We may consider and approve other link requests from the following types of organizations:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">📊</span>
+                            <span class="text-gray-700">Consumer/business information sources</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">🌐</span>
+                            <span class="text-gray-700">Dot.com community sites</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">💝</span>
+                            <span class="text-gray-700">Charity associations or groups</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">📂</span>
+                            <span class="text-gray-700">Online directory distributors</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">🔮</span>
+                            <span class="text-gray-700">Internet portals</span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-4 flex items-center">
+                            <span class="text-sheepong-orange mr-3">💼</span>
+                            <span class="text-gray-700">Professional firms and associations</span>
+                        </div>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        If you are one of the organizations listed above and are interested in linking to our website, you must inform us by sending an e-mail to Sheepong: Match-3 Adventure. Please include your name, your organization name, contact information, and the URL of your site, along with a list of any URLs from which you intend to link to our Website.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- iFrames Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🖼️
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">iFrames</h2>
+                    </div>
+
+                    <div class="border-l-4 border-sheepong-orange pl-6 py-2 mb-6">
+                        <p class="text-lg text-gray-700">
+                            Without prior approval and written permission, you may not create frames around our Webpages that alter in any way the visual presentation or appearance of our Website.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Liability Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            ⚖️
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Content Liability</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        We shall not be held responsible for any content that appears on your Website. You agree to protect and defend us against all claims arising from your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene, or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Reservation of Rights Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🛡️
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Reservation of Rights</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        We reserve the right to request that you remove all links or any particular link to our Website. You approve to immediately remove all links to our Website upon request. We also reserve the right to amend these terms and conditions and our linking policy at any time. By continuously linking to our Website, you agree to be bound to and follow these linking terms and conditions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Removal of Links Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🔄
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Removal of links from our website</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        If you find any link on our Website that is offensive for any reason, you are free to contact and inform us at any moment. We will consider requests to remove links but we are not obligated to or so or to respond to you directly.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            ⚠️
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Disclaimer</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        To the maximum extent permitted by applicable law, we exclude all representations, warranties, and conditions relating to our website and the use of this website. Nothing in this disclaimer will:
+                    </p>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">Limit or exclude our or your liability for death or personal injury;</p>
+                        </div>
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">Limit or exclude our or your liability for fraud or fraudulent misrepresentation;</p>
+                        </div>
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">Limit any of our or your liabilities in any way that is not permitted under applicable law;</p>
+                        </div>
+                        <div class="flex">
+                            <div class="text-sheepong-orange mr-3 text-xl">•</div>
+                            <p class="text-lg text-gray-700">Exclude any of our or your liabilities that may not be excluded under applicable law.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-sheepong-blue/10 rounded-2xl p-6 mb-6">
+                        <p class="text-sheepong-blue font-medium">
+                            As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-sheepong-blue text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl mr-3">
+                        🐑
+                    </div>
+                    <span class="text-white font-bold text-xl">Sheepong: Match-3 Adventure</span>
+                </div>
+
+            </div>
+
+            <div class="border-t border-sheepong-blue-600 pt-8 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-sm text-gray-300 mb-4 md:mb-0">
+                        © 2025 Sheepong: Match-3 Adventure. All rights reserved.
+                    </p>
+                    <div class="flex flex-wrap justify-center space-x-4">
+                        <a href="/Policy356/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Privacy Policy</a>
+                        <a href="/Service347/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Terms of Service</a>
+                        <a href="/Cookie992/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Cookie Policy</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-sheepong-orange text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <!-- Simple JavaScript (minimal) -->
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu after clicking
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Simple animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .gallery-image');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+
+                if (elementPosition < screenPosition) {
+                    element.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Add a simple Easter egg
+        let sheepCounter = 0;
+        const sheepEgg = () => {
+            sheepCounter++;
+            if (sheepCounter === 5) {
+                console.log("Baa! You found Sheepong's secret!");
+                const egg = document.createElement('div');
+                egg.classList.add('fixed', 'bottom-20', 'left-6', 'text-4xl', 'animate-bounce');
+                egg.innerHTML = '🐑';
+                document.body.appendChild(egg);
+
+                setTimeout(() => {
+                    egg.classList.add('transition-all', 'duration-1000', 'opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(egg);
+                    }, 1000);
+                }, 5000);
+
+                sheepCounter = 0;
+            }
+        };
+
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('click', sheepEgg);
+        });
+    </script>
+
+    <?php include '../cookie-consent.php'; ?>
+</body>
+
+</html>

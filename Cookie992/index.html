@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheepong: Match-3 Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel='icon' href='/src/icons/logo.png' type='image/x-icon'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sheepong-orange': '#f89554',
+                        'sheepong-blue': '#426c79',
+                    },
+                    fontFamily: {
+                        'game': ['Nunito', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .glow {
+            box-shadow: 0 0 15px rgba(248, 149, 84, 0.5);
+        }
+
+        .hero-bg {
+            background-image: url('/src/img/hero.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                right: 0;
+                background-color: white;
+                width: 100%;
+                z-index: 50;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white overflow-x-hidden">
+    <!-- Header Section -->
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <nav class="flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl glow">
+                        🐑
+                    </div>
+                    <span class="text-sheepong-blue font-bold text-xl md:text-2xl">Sheepong: Match-3 Adventure</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Home</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Gallery</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Characters</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Reviews</a>
+                    <a href="/" class="bg-sheepong-orange text-white px-6 py-2 rounded-full font-bold hover:bg-opacity-90 transition duration-300 glow">Download</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-sheepong-blue focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden mobile-menu md:hidden">
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Home</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Features</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Gallery</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Characters</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Reviews</a>
+                <a href="/" class="block py-3 px-4 text-center bg-sheepong-orange text-white font-bold">Download</a>
+            </div>
+        </div>
+    </header>
+    <!-- Cookie Policy Header Section -->
+    <section class="py-24 bg-gradient-to-b from-sheepong-blue to-sheepong-blue/80 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Cookie Policy</h1>
+                <p class="text-xl font-light">Sheepong: Match-3 Adventure</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cookie Policy Introduction Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-8">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🍪
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">What Are Cookies?</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Cookies are small text files that are placed on your device when you visit a website. They are widely used to make websites work more efficiently and provide information to the website owners. Cookies enhance your browsing experience by:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gray-50 rounded-2xl p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="text-sheepong-orange text-xl mr-3">🔄</div>
+                                <h3 class="text-xl font-semibold text-sheepong-blue">Remembering Your Preferences</h3>
+                            </div>
+                            <p class="text-gray-700">
+                                Cookies help us remember choices you've made, such as your language or region, to provide a more personalized experience.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-2xl p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="text-sheepong-orange text-xl mr-3">🛒</div>
+                                <h3 class="text-xl font-semibold text-sheepong-blue">Improving Functionality</h3>
+                            </div>
+                            <p class="text-gray-700">
+                                They enable features like saving game progress, remembering login information, and providing a seamless experience.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-2xl p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="text-sheepong-orange text-xl mr-3">📊</div>
+                                <h3 class="text-xl font-semibold text-sheepong-blue">Analyzing Usage</h3>
+                            </div>
+                            <p class="text-gray-700">
+                                Cookies help us understand how visitors interact with our website, allowing us to improve our services.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-2xl p-6">
+                            <div class="flex items-center mb-3">
+                                <div class="text-sheepong-orange text-xl mr-3">🎯</div>
+                                <h3 class="text-xl font-semibold text-sheepong-blue">Targeted Advertising</h3>
+                            </div>
+                            <p class="text-gray-700">
+                                Some cookies help deliver advertisements that are relevant to you and your interests.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-sheepong-orange/10 rounded-2xl p-6 mb-8">
+                        <p class="text-sheepong-blue font-medium">
+                            By using our website, you consent to the use of cookies in accordance with this Cookie Policy. You can control and manage cookies in various ways as explained below.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Types of Cookies Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-8">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🧩
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Types of Cookies We Use</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-8">
+                        Sheepong: Match-3 Adventure uses several types of cookies for different purposes. Understanding these types helps you make informed decisions about your cookie preferences.
+                    </p>
+
+                    <div class="space-y-8">
+                        <!-- Essential Cookies -->
+                        <div class="border-l-4 border-sheepong-blue pl-6 py-2">
+                            <h3 class="text-2xl font-bold text-sheepong-blue mb-3">Essential Cookies</h3>
+                            <p class="text-lg text-gray-700 mb-3">
+                                These cookies are necessary for the website to function properly. They enable core features such as security, network management, and account access. You cannot opt out of these cookies as the website cannot function properly without them.
+                            </p>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-gray-700 text-sm">
+                                    <span class="font-semibold">Examples:</span> Session cookies, authentication cookies, security cookies
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Preference Cookies -->
+                        <div class="border-l-4 border-sheepong-orange pl-6 py-2">
+                            <h3 class="text-2xl font-bold text-sheepong-blue mb-3">Preference Cookies</h3>
+                            <p class="text-lg text-gray-700 mb-3">
+                                Preference cookies allow a website to remember choices you have made in the past, like language preferences, theme settings, or your username for login purposes.
+                            </p>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-gray-700 text-sm">
+                                    <span class="font-semibold">Examples:</span> Language preference cookies, theme selection cookies, game settings cookies
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Types of Cookies (Continued) -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="space-y-8">
+                        <!-- Statistics Cookies -->
+                        <div class="border-l-4 border-sheepong-blue pl-6 py-2">
+                            <h3 class="text-2xl font-bold text-sheepong-blue mb-3">Statistics Cookies</h3>
+                            <p class="text-lg text-gray-700 mb-3">
+                                Statistics cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This data helps us improve our website and your experience.
+                            </p>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-gray-700 text-sm">
+                                    <span class="font-semibold">Examples:</span> Google Analytics cookies, which collect information about how you use our site, which pages you visit, and how you interact with page content
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Marketing Cookies -->
+                        <div class="border-l-4 border-sheepong-orange pl-6 py-2">
+                            <h3 class="text-2xl font-bold text-sheepong-blue mb-3">Marketing Cookies</h3>
+                            <p class="text-lg text-gray-700 mb-3">
+                                Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user. These cookies help make advertising more effective and valuable to publishers and third-party advertisers.
+                            </p>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-gray-700 text-sm">
+                                    <span class="font-semibold">Examples:</span> Google Advertising cookies (such as DoubleClick), social media cookies, retargeting cookies
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Third-Party Cookies -->
+                        <div class="border-l-4 border-sheepong-blue pl-6 py-2">
+                            <h3 class="text-2xl font-bold text-sheepong-blue mb-3">Third-Party Cookies</h3>
+                            <p class="text-lg text-gray-700 mb-3">
+                                Our website may use third-party services that set cookies on your device. These services include analytics tools, advertising networks, social media platforms, and embedded content providers.
+                            </p>
+                            <div class="bg-gray-50 rounded-xl p-4">
+                                <p class="text-gray-700 text-sm">
+                                    <span class="font-semibold">Examples:</span> YouTube video cookies, Facebook pixels, ad network cookies
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-10 p-6 bg-sheepong-orange/10 rounded-2xl">
+                        <h3 class="text-xl font-bold text-sheepong-blue mb-3">Google Analytics and Advertising</h3>
+                        <p class="text-gray-700 mb-3">
+                            We use Google Analytics to analyze how visitors use our website. Google Analytics uses cookies to collect information about the number of visitors to the site, where they came from, and the pages they visited. We also use Google advertising services, such as Google Ads and DoubleClick, which may set cookies to help tailor advertisements across the web based on your browsing activity.
+                        </p>
+                        <p class="text-gray-700">
+                            For more information about how Google uses cookies in advertising, you can visit the <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">Google Advertising Policies & Principles</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Managing Cookies Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-8">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            ⚙️
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Managing Your Cookie Preferences</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-8">
+                        You have the right to decide whether to accept or reject cookies. You can exercise your cookie preferences in several ways:
+                    </p>
+
+                    <div class="space-y-6 mb-8">
+                        <!-- Browser Settings -->
+                        <div class="rounded-2xl bg-gray-50 p-6">
+                            <div class="flex items-start">
+                                <div class="text-sheepong-orange text-2xl mr-4 mt-1">🌐</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-sheepong-blue mb-2">Browser Settings</h3>
+                                    <p class="text-gray-700 mb-3">
+                                        Most web browsers allow you to control cookies through their settings. You can usually find these settings in the "Options" or "Preferences" menu of your browser.
+                                    </p>
+                                    <p class="text-gray-700">
+                                        You can set your browser to block or alert you about cookies, delete cookies, or browse in a private mode that automatically rejects certain cookies. Please note that restricting cookies may impact your experience on our website and limit certain functionalities.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cookie Consent Tool -->
+                        <div class="rounded-2xl bg-gray-50 p-6">
+                            <div class="flex items-start">
+                                <div class="text-sheepong-orange text-2xl mr-4 mt-1">🔧</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-sheepong-blue mb-2">Our Cookie Consent Tool</h3>
+                                    <p class="text-gray-700 mb-3">
+                                        When you first visit our website, you will be presented with a cookie banner that allows you to accept or reject non-essential cookies. You can change your preferences at any time by clicking the "Cookie Settings" link in the footer of our website.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Managing Cookies (Continued) -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="space-y-6 mb-8">
+                        <!-- Opt-out of Specific Services -->
+                        <div class="rounded-2xl bg-gray-50 p-6">
+                            <div class="flex items-start">
+                                <div class="text-sheepong-orange text-2xl mr-4 mt-1">🚫</div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-sheepong-blue mb-2">Opt-out of Specific Services</h3>
+                                    <p class="text-gray-700 mb-3">
+                                        You can opt out of certain third-party services that use cookies:
+                                    </p>
+                                    <ul class="space-y-3">
+                                        <li class="flex">
+                                            <span class="text-sheepong-orange mr-2">•</span>
+                                            <span class="text-gray-700">
+                                                <strong>Google Analytics:</strong> You can install the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">Google Analytics Opt-out Browser Add-on</a> to prevent Google Analytics from collecting data about your visits.
+                                            </span>
+                                        </li>
+                                        <li class="flex">
+                                            <span class="text-sheepong-orange mr-2">•</span>
+                                            <span class="text-gray-700">
+                                                <strong>Google Advertising:</strong> You can customize how Google advertises to you using the <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">Google Ad Settings</a> page.
+                                            </span>
+                                        </li>
+                                        <li class="flex">
+                                            <span class="text-sheepong-orange mr-2">•</span>
+                                            <span class="text-gray-700">
+                                                <strong>Industry Tools:</strong> You can opt out of interest-based advertising through industry tools like the <a href="https://optout.aboutads.info/" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">Digital Advertising Alliance Opt-Out Tool</a>, the <a href="https://www.networkadvertising.org/choices/" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">Network Advertising Initiative Opt-Out Tool</a>, or the <a href="https://www.youronlinechoices.eu/" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">European Interactive Digital Advertising Alliance Tool</a> (for EU users).
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-sheepong-blue/10 rounded-2xl p-6 mb-8">
+                        <p class="text-sheepong-blue font-medium">
+                            Please note that if you choose to delete or block cookies, you may not be able to use all of the features of our website. For example, some features that personalize your experience or remember your preferences may not work.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cookie Retention Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-8">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🕒
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Cookie Retention</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        The length of time a cookie will remain on your device depends on whether it is a "persistent" or "session" cookie:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-gray-50 rounded-2xl p-6">
+                            <h3 class="text-xl font-bold text-sheepong-blue mb-3">Session Cookies</h3>
+                            <p class="text-gray-700">
+                                Session cookies last only for your current browsing session and are deleted from your device when you close your browser.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-2xl p-6">
+                            <h3 class="text-xl font-bold text-sheepong-blue mb-3">Persistent Cookies</h3>
+                            <p class="text-gray-700">
+                                Persistent cookies remain on your device even after you close your browser. They last until they expire or until you delete them. The expiration period varies depending on the cookie's purpose.
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="text-lg text-gray-700">
+                        For instance, preferences cookies might last for 1 year, while marketing cookies typically expire after 13 months. We regularly review our cookies to ensure they are not kept longer than necessary.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Updates to Cookie Policy Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-8">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🔄
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Updates to Our Cookie Policy</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        We may update this Cookie Policy from time to time to reflect changes in technology, regulations, or our business practices. Any changes will be posted on this page with an updated revision date. If we make significant changes to this policy, we may notify you through a notice on our website or by email.
+                    </p>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        We encourage you to review this Cookie Policy periodically to stay informed about how we use cookies and related technologies.
+                    </p>
+
+                    <div class="border-t border-gray-200 pt-8 mt-8">
+                        <p class="text-gray-600 text-sm mb-2">Last Updated: March 20, 2025</p>
+                        <p class="text-gray-600 text-sm">
+                            If you have any questions or concerns about our use of cookies, please contact us at <a href="mailto:privacy@sheepong-play.com" class="text-sheepong-orange hover:underline">privacy@sheepong-play.com</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer Navigation -->
+    <section class="py-10 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto flex justify-center">
+                <a href="/" class="px-4 py-2 text-sheepong-blue hover:text-sheepong-orange transition duration-300">Home</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-sheepong-blue text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl mr-3">
+                        🐑
+                    </div>
+                    <span class="text-white font-bold text-xl">Sheepong: Match-3 Adventure</span>
+                </div>
+
+            </div>
+
+            <div class="border-t border-sheepong-blue-600 pt-8 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-sm text-gray-300 mb-4 md:mb-0">
+                        © 2025 Sheepong: Match-3 Adventure. All rights reserved.
+                    </p>
+                    <div class="flex flex-wrap justify-center space-x-4">
+                        <a href="/Policy356/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Privacy Policy</a>
+                        <a href="/Service347/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Terms of Service</a>
+                        <a href="/Cookie992/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Cookie Policy</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-sheepong-orange text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <!-- Simple JavaScript (minimal) -->
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu after clicking
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Simple animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .gallery-image');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+
+                if (elementPosition < screenPosition) {
+                    element.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Add a simple Easter egg
+        let sheepCounter = 0;
+        const sheepEgg = () => {
+            sheepCounter++;
+            if (sheepCounter === 5) {
+                console.log("Baa! You found Sheepong's secret!");
+                const egg = document.createElement('div');
+                egg.classList.add('fixed', 'bottom-20', 'left-6', 'text-4xl', 'animate-bounce');
+                egg.innerHTML = '🐑';
+                document.body.appendChild(egg);
+
+                setTimeout(() => {
+                    egg.classList.add('transition-all', 'duration-1000', 'opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(egg);
+                    }, 1000);
+                }, 5000);
+
+                sheepCounter = 0;
+            }
+        };
+
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('click', sheepEgg);
+        });
+    </script>
+
+    <?php include '../cookie-consent.php'; ?>
+</body>
+
+</html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheepong: Match-3 Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel='icon' href='/src/icons/logo.png' type='image/x-icon'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sheepong-orange': '#f89554',
+                        'sheepong-blue': '#426c79',
+                    },
+                    fontFamily: {
+                        'game': ['Nunito', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .glow {
+            box-shadow: 0 0 15px rgba(248, 149, 84, 0.5);
+        }
+
+        .hero-bg {
+            background-image: url('/src/img/hero.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                right: 0;
+                background-color: white;
+                width: 100%;
+                z-index: 50;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white overflow-x-hidden">
+    <!-- Header Section -->
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <nav class="flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl glow">
+                        🐑
+                    </div>
+                    <span class="text-sheepong-blue font-bold text-xl md:text-2xl">Sheepong: Match-3 Adventure</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Home</a>
+                    <a href="#features" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Features</a>
+                    <a href="#gallery" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Gallery</a>
+                    <a href="#characters" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Characters</a>
+                    <a href="#reviews" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Reviews</a>
+                    <a href="#download" class="bg-sheepong-orange text-white px-6 py-2 rounded-full font-bold hover:bg-opacity-90 transition duration-300 glow">Download</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-sheepong-blue focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden mobile-menu md:hidden">
+                <a href="#home" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Home</a>
+                <a href="#features" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Features</a>
+                <a href="#gallery" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Gallery</a>
+                <a href="#characters" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Characters</a>
+                <a href="#reviews" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Reviews</a>
+                <a href="#download" class="block py-3 px-4 text-center bg-sheepong-orange text-white font-bold">Download</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg relative pt-24 pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-sheepong-blue/80 to-sheepong-orange/80"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center mt-16">
+                <div class="md:w-1/2 text-white mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                        Join Sheepong's <span class="text-sheepong-orange glow">Epic Adventure</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl font-light mb-8 leading-relaxed">
+                        Help our brave teenage sheep hero find his mom in this exciting Match-3 puzzle adventure!
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#download" class="bg-sheepong-orange text-white px-8 py-4 rounded-full font-bold text-xl text-center hover:bg-opacity-90 transition duration-300 glow">
+                            Download Now
+                        </a>
+                        <a href="#features" class="bg-white text-sheepong-blue px-8 py-4 rounded-full font-bold text-xl text-center hover:bg-opacity-90 transition duration-300">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="/src/img/first.png" alt="Sheepong Hero" class="rounded-3xl shadow-2xl transform -rotate-3 glow">
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-none rotate-180">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-20">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" fill="#ffffff"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 pr-0 md:pr-8 mb-10 md:mb-0">
+                    <img src="/src/img/Story.png" alt="Sheepong Story" class="rounded-3xl shadow-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6 text-sheepong-blue">The Story Begins...</h2>
+                    <p class="text-lg md:text-xl text-gray-700 font-light mb-8 leading-relaxed">
+                        Join the heroic journey of Sheepong, a bold lovely teenage sheep, whose mom was taken by wolves. Do you think he's afraid of them? Not a bit, but he needs your help to guide him through this world full of wonders and troubles!
+                    </p>
+                    <p class="text-lg md:text-xl text-gray-700 font-light mb-8 leading-relaxed">
+                        Help this young soul's family reunion and get all the treasures along the way! Match 3 or more blocks on the boards to make a match, learn new rules of creating and mixing special offers, meet new enemies, interact with different characters, and prepare your mind for new exciting missions!
+                    </p>
+                    <div class="flex items-center mb-2">
+                        <span class="text-sheepong-orange text-2xl mr-2">✨</span>
+                        <p class="text-xl font-bold text-sheepong-blue">The real FUN begins here!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gradient-to-b from-white to-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-sheepong-blue">Amazing Features</h2>
+                <p class="text-xl text-gray-600 font-light max-w-3xl mx-auto">Discover all the incredible adventures and challenges that await you in Sheepong's magical world!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 feature-card transition duration-300 hover:shadow-xl">
+                    <div class="mb-6 text-4xl text-sheepong-orange">🌍</div>
+                    <h3 class="text-2xl font-bold mb-4 text-sheepong-blue">Go on an Adventure</h3>
+                    <p class="text-gray-600 text-lg">
+                        Walk, run, ride, sail, and even fly! Explore the vast world of wonders in exciting means and uncover its every little secret. But beware – you run the risk of getting lost in this deep wild world!
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 feature-card transition duration-300 hover:shadow-xl">
+                    <div class="mb-6 text-4xl text-sheepong-orange">🐺</div>
+                    <h3 class="text-2xl font-bold mb-4 text-sheepong-blue">Living, Breathing Enemies</h3>
+                    <p class="text-gray-600 text-lg">
+                        Wolves have personalities, too! Meet the pack as you navigate through their tricks and traps. Learn each of their characteristics and use it against them. When the night falls, however, their true nature and power will come out.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 feature-card transition duration-300 hover:shadow-xl">
+                    <div class="mb-6 text-4xl text-sheepong-orange">⚡</div>
+                    <h3 class="text-2xl font-bold mb-4 text-sheepong-blue">You've Got the Power!</h3>
+                    <p class="text-gray-600 text-lg">
+                        Ever wish for that game-changing, saving-the-day kind of super power? Well, you've got it! Unlock and upgrade various powerful skills, and use them! Be strategic and choose wisely!
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 feature-card transition duration-300 hover:shadow-xl">
+                    <div class="mb-6 text-4xl text-sheepong-orange">💎</div>
+                    <h3 class="text-2xl font-bold mb-4 text-sheepong-blue">Match-3 Puzzles</h3>
+                    <p class="text-gray-600 text-lg">
+                        Solve challenging puzzles by matching 3 or more similar blocks. Create special combinations for powerful effects that help you progress through increasingly difficult levels.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 feature-card transition duration-300 hover:shadow-xl">
+                    <div class="mb-6 text-4xl text-sheepong-orange">🏆</div>
+                    <h3 class="text-2xl font-bold mb-4 text-sheepong-blue">Achievements & Rewards</h3>
+                    <p class="text-gray-600 text-lg">
+                        Complete missions, earn stars, and unlock special rewards as you progress. Challenge yourself to achieve the highest score on every level!
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 feature-card transition duration-300 hover:shadow-xl">
+                    <div class="mb-6 text-4xl text-sheepong-orange">👫</div>
+                    <h3 class="text-2xl font-bold mb-4 text-sheepong-blue">Meet New Friends</h3>
+                    <p class="text-gray-600 text-lg">
+                        Along your journey, you'll encounter colorful characters who will help Sheepong on his quest to find his mother and defeat the wolves.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-sheepong-blue">Game Gallery</h2>
+                <p class="text-xl text-gray-600 font-light max-w-3xl mx-auto">Peek into Sheepong's colorful world with these exciting screenshots!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="overflow-hidden rounded-2xl shadow-lg gallery-image transition duration-300">
+                    <img src="/src/img/gallery1.png" alt="Gameplay Screenshot 1" class="w-full h-auto">
+                </div>
+                <div class="overflow-hidden rounded-2xl shadow-lg gallery-image transition duration-300">
+                    <img src="/src/img/gallery2.png" alt="Gameplay Screenshot 2" class="w-full h-auto">
+                </div>
+                <div class="overflow-hidden rounded-2xl shadow-lg gallery-image transition duration-300">
+                    <img src="/src/img/gallery3.png" alt="Gameplay Screenshot 3" class="w-full h-auto">
+                </div>
+                <div class="overflow-hidden rounded-2xl shadow-lg gallery-image transition duration-300">
+                    <img src="/src/img/gallery4.png" alt="Gameplay Screenshot 4" class="w-full h-auto">
+                </div>
+                <div class="overflow-hidden rounded-2xl shadow-lg gallery-image transition duration-300">
+                    <img src="/src/img/gallery5.png" alt="Gameplay Screenshot 5" class="w-full h-auto">
+                </div>
+                <div class="overflow-hidden rounded-2xl shadow-lg gallery-image transition duration-300">
+                    <img src="/src/img/gallery6.png" alt="Gameplay Screenshot 6" class="w-full h-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characters Section -->
+    <section id="characters" class="py-20 bg-gradient-to-b from-white to-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-sheepong-blue">Meet the Characters</h2>
+                <p class="text-xl text-gray-600 font-light max-w-3xl mx-auto">Get to know the friends and foes that Sheepong will encounter on his journey!</p>
+            </div>
+
+            <div class="flex flex-wrap justify-center">
+                <!-- Character 1: Sheepong -->
+                <div class="w-full md:w-1/2 lg:w-1/3 p-6">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2">
+
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-sheepong-blue">Sheepong</h3>
+                            <p class="text-sheepong-orange font-semibold mb-3">Main Hero</p>
+                            <p class="text-gray-600">
+                                A brave teenage sheep on a mission to rescue his mother. Despite his young age, Sheepong is determined and fearless in the face of danger.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Character 2: Alpha Wolf -->
+                <div class="w-full md:w-1/2 lg:w-1/3 p-6">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2">
+
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-sheepong-blue">Alpha Wolf</h3>
+                            <p class="text-sheepong-orange font-semibold mb-3">Main Antagonist</p>
+                            <p class="text-gray-600">
+                                The leader of the wolf pack who orchestrated the kidnapping of Sheepong's mother. Cunning and powerful, especially under the moonlight.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Character 3: Woolly -->
+                <div class="w-full md:w-1/2 lg:w-1/3 p-6">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition duration-300 hover:shadow-xl transform hover:-translate-y-2">
+
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2 text-sheepong-blue">Woolly</h3>
+                            <p class="text-sheepong-orange font-semibold mb-3">Wise Mentor</p>
+                            <p class="text-gray-600">
+                                An elder sheep who guides Sheepong on his journey, teaching him about his special abilities and how to use them against the wolves.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-sheepong-blue">Player Reviews</h2>
+                <div class="flex items-center justify-center mb-4">
+                    <div class="flex">
+                        <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                        <svg class="w-8 h-8 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                        </svg>
+                    </div>
+                    <p class="ml-2 text-xl font-medium text-gray-700">4.3 out of 5</p>
+                </div>
+                <p class="text-xl text-gray-600 font-light">Based on 2,380 reviews and 100,000+ downloads</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 transition duration-300 hover:shadow-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <!-- Reviews Section (continued) -->
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Absolutely Adorable!</h3>
+                    <p class="text-gray-600 mb-4">
+                        "This game is so much fun! I love the cute characters and challenging puzzles. The story is engaging and I find myself playing for hours. Sheepong is such a brave little sheep!"
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-sheepong-orange text-white flex items-center justify-center font-bold">A</div>
+                        <p class="ml-3 text-gray-700">Amy S.</p>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 transition duration-300 hover:shadow-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Best Match-3 Game Ever!</h3>
+                    <p class="text-gray-600 mb-4">
+                        "Sheepong has the perfect balance of challenge and fun. The special powers add a strategic element that keeps me coming back. The story is surprisingly touching too!"
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-sheepong-orange text-white flex items-center justify-center font-bold">M</div>
+                        <p class="ml-3 text-gray-700">Michael T.</p>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 transition duration-300 hover:shadow-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="flex text-yellow-400">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Great for All Ages</h3>
+                    <p class="text-gray-600 mb-4">
+                        "My kids and I love playing this game together. The puzzles start simple but get challenging enough for adults. The wolves are scary but not too scary - perfect balance!"
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-sheepong-orange text-white flex items-center justify-center font-bold">S</div>
+                        <p class="ml-3 text-gray-700">Sarah K.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="#download" class="inline-block bg-sheepong-blue text-white px-8 py-4 rounded-full font-bold text-xl hover:bg-opacity-90 transition duration-300">Join the Adventure Today!</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="py-20 bg-gradient-to-b from-white to-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center justify-between">
+                <div class="lg:w-1/2 mb-10 lg:mb-0 text-center lg:text-left">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 text-sheepong-blue">Ready to Help Sheepong?</h2>
+                    <p class="text-xl text-gray-600 font-light mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
+                        Download now and join Sheepong on his epic quest to rescue his mother and defeat the wolf pack!
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="https://apps.apple.com/app/id1497676190" target="_blank" class="bg-sheepong-orange text-white px-8 py-4 rounded-full font-bold text-xl text-center hover:bg-opacity-90 transition duration-300 glow flex items-center justify-center">
+                            <span class="mr-2">🍎</span>
+                            App Store
+                        </a>
+                        <a href="https://play.google.com/store/apps/details?id=com.playdogsoft.sheepong" target="_blank" class="bg-sheepong-blue text-white px-8 py-4 rounded-full font-bold text-xl text-center hover:bg-opacity-90 transition duration-300 glow flex items-center justify-center">
+                            <span class="mr-2">🤖</span>
+                            Google Play
+                        </a>
+                    </div>
+                    <div class="mt-6 flex items-center justify-center lg:justify-start">
+                        <div class="flex items-center mr-6">
+                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            <span class="ml-1 text-sheepong-blue font-semibold">4.3 Rating</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-sheepong-orange" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="ml-1 text-sheepong-blue font-semibold">100K+ Downloads</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <img src="/src/img/download.png" alt="Sheepong App" class="rounded-3xl   z-10 relative">
+                        <div class="absolute top-6 -left-6 w-24 h-24 bg-sheepong-orange rounded-full opacity-30 animate-pulse"></div>
+                        <div class="absolute bottom-6 -right-6 w-32 h-32 bg-sheepong-blue rounded-full opacity-30 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Highlight Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 text-sheepong-blue">Why Players Love Sheepong</h2>
+                <p class="text-xl text-gray-600 font-light max-w-3xl mx-auto">The perfect blend of strategy, fun, and heartwarming adventure!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Highlight 1 -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 text-center transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-sheepong-orange/10 flex items-center justify-center">
+                        <span class="text-3xl text-sheepong-orange">🧩</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Challenging Puzzles</h3>
+                    <p class="text-gray-600">
+                        Over 500 levels of increasingly challenging Match-3 puzzles with unique mechanics
+                    </p>
+                </div>
+
+                <!-- Highlight 2 -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 text-center transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-sheepong-orange/10 flex items-center justify-center">
+                        <span class="text-3xl text-sheepong-orange">📖</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Captivating Story</h3>
+                    <p class="text-gray-600">
+                        Follow Sheepong's emotional journey through a beautifully crafted storyline
+                    </p>
+                </div>
+
+                <!-- Highlight 3 -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 text-center transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-sheepong-orange/10 flex items-center justify-center">
+                        <span class="text-3xl text-sheepong-orange">🎮</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Regular Updates</h3>
+                    <p class="text-gray-600">
+                        New levels, characters, and special events added frequently to keep the adventure fresh
+                    </p>
+                </div>
+
+                <!-- Highlight 4 -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 text-center transition duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-sheepong-orange/10 flex items-center justify-center">
+                        <span class="text-3xl text-sheepong-orange">👪</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-sheepong-blue">Family Friendly</h3>
+                    <p class="text-gray-600">
+                        Suitable for all ages 3+ with intuitive controls and appropriate content
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-sheepong-blue text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl mr-3">
+                        🐑
+                    </div>
+                    <span class="text-white font-bold text-xl">Sheepong: Match-3 Adventure</span>
+                </div>
+
+            </div>
+
+            <div class="border-t border-sheepong-blue-600 pt-8 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-sm text-gray-300 mb-4 md:mb-0">
+                        © 2025 Sheepong: Match-3 Adventure. All rights reserved.
+                    </p>
+                    <div class="flex flex-wrap justify-center space-x-4">
+                        <a href="/Policy356/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Privacy Policy</a>
+                        <a href="/Service347/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Terms of Service</a>
+                        <a href="/Cookie992/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Cookie Policy</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-sheepong-orange text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <!-- Simple JavaScript (minimal) -->
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu after clicking
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Simple animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .gallery-image');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+
+                if (elementPosition < screenPosition) {
+                    element.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Add a simple Easter egg
+        let sheepCounter = 0;
+        const sheepEgg = () => {
+            sheepCounter++;
+            if (sheepCounter === 5) {
+                console.log("Baa! You found Sheepong's secret!");
+                const egg = document.createElement('div');
+                egg.classList.add('fixed', 'bottom-20', 'left-6', 'text-4xl', 'animate-bounce');
+                egg.innerHTML = '🐑';
+                document.body.appendChild(egg);
+
+                setTimeout(() => {
+                    egg.classList.add('transition-all', 'duration-1000', 'opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(egg);
+                    }, 1000);
+                }, 5000);
+
+                sheepCounter = 0;
+            }
+        };
+
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('click', sheepEgg);
+        });
+    </script>
+
+    <?php include 'cookie-consent.php'; ?>
+</body>
+
+</html>

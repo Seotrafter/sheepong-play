@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheepong: Match-3 Adventure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel='icon' href='/src/icons/logo.png' type='image/x-icon'>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sheepong-orange': '#f89554',
+                        'sheepong-blue': '#426c79',
+                    },
+                    fontFamily: {
+                        'game': ['Nunito', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .glow {
+            box-shadow: 0 0 15px rgba(248, 149, 84, 0.5);
+        }
+
+        .hero-bg {
+            background-image: url('/src/img/hero.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                right: 0;
+                background-color: white;
+                width: 100%;
+                z-index: 50;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white overflow-x-hidden">
+    <!-- Header Section -->
+    <header class="fixed w-full bg-white shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <nav class="flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl glow">
+                        🐑
+                    </div>
+                    <span class="text-sheepong-blue font-bold text-xl md:text-2xl">Sheepong: Match-3 Adventure</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Home</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Gallery</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Characters</a>
+                    <a href="/" class="text-sheepong-blue hover:text-sheepong-orange font-semibold transition duration-300">Reviews</a>
+                    <a href="/" class="bg-sheepong-orange text-white px-6 py-2 rounded-full font-bold hover:bg-opacity-90 transition duration-300 glow">Download</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-sheepong-blue focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden mobile-menu md:hidden">
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Home</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Features</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Gallery</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Characters</a>
+                <a href="/" class="block py-3 px-4 text-center text-sheepong-blue hover:bg-sheepong-orange hover:text-white font-semibold">Reviews</a>
+                <a href="/" class="block py-3 px-4 text-center bg-sheepong-orange text-white font-bold">Download</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Privacy Policy Header Section -->
+    <section class="py-24 bg-gradient-to-b from-sheepong-blue to-sheepong-blue/80 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Privacy Policy</h1>
+                <p class="text-xl font-light">Sheepong: Match-3 Adventure</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Policy Introduction Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <p class="text-lg text-gray-700 mb-6">
+                        At Sheepong: Match-3 Adventure, accessible from https://sheepong-play.com/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that are collected and recorded by Sheepong: Match-3 Adventure and how we use it.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.
+                    </p>
+
+                    <div class="border-l-4 border-sheepong-orange pl-6 py-2 mb-8">
+                        <p class="text-sheepong-blue italic font-medium">
+                            Your privacy matters to us. We are committed to protecting your personal information and being transparent about how we use it.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Log Files Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            📊
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Log Files</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Sheepong: Match-3 Adventure follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and are a part of hosting services' analytics. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        These are not linked to any personally identifiable information. The purpose of the information is to analyze trends, administer the site, track users' movement on the website, and gather demographic information. Our Privacy Policy was created with the help of the Privacy Policy Generator.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cookies Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🍪
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Cookies and Web Beacons</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Like any other website, Sheepong: Match-3 Adventure uses "cookies." These cookies are used to store information including visitors' preferences and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        For more general information on cookies, please read the "Cookies" article from the Privacy Policy Generator.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Google DART Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🔍
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Google DoubleClick DART Cookie</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Google is one of the third-party vendors on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to https://sheepong-play.com/ and other sites on the internet. However, visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL:
+                    </p>
+                    <div class="mb-6">
+                        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange font-medium hover:underline">https://policies.google.com/technologies/ads</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advertising Partners Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🤝
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Our Advertising Partners</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Some advertisers on our site may use cookies and web beacons. Our advertising partners are listed below. Each of our advertising partners has its own Privacy Policy for their policies on user data. For easier access, we hyperlinked to their Privacy Policies below:
+                    </p>
+
+                    <div class="mb-6 pl-4 border-l-4 border-sheepong-orange">
+                        <p class="mb-2 font-medium text-sheepong-blue">Google</p>
+                        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-sheepong-orange hover:underline">https://policies.google.com/technologies/ads</a>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-sheepong-blue mb-4">Privacy Policies</h3>
+                    <p class="text-lg text-gray-700 mb-6">
+                        You may consult this list to find the Privacy Policy for each of the advertising partners of Sheepong: Match-3 Adventure.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Sheepong: Match-3 Adventure, which are sent directly to users' browsers. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Note that Sheepong: Match-3 Adventure has no access to or control over these cookies that are used by third-party advertisers.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Third-Party Policies Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            📝
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Third-Party Privacy Policies</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Sheepong: Match-3 Adventure's Privacy Policy does not apply to other advertisers or websites. Thus, we advise you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt out of certain options.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        You can choose to disable cookies through your browser options. More detailed information about cookie management with specific web browsers can be found at the browsers' respective websites.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Children's Information Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            👶
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Children's Information</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
+                    </p>
+                    <p class="text-lg text-gray-700 mb-6">
+                        Sheepong: Match-3 Adventure does not knowingly collect any personally identifiable information from children under the age of 13. If you believe that your child provided this kind of information on our website, we strongly encourage you to contact us immediately, and we will do our best efforts to promptly remove such information from our records.
+                    </p>
+
+                    <div class="p-6 bg-sheepong-orange/10 rounded-2xl">
+                        <p class="text-sheepong-blue font-medium">
+                            <span class="text-xl">⚠️</span> We care about children's safety and privacy. Our game is designed to be family-friendly and we take extra precautions to protect younger players.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Online Policy Only Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-3xl shadow-lg p-8 md:p-12">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 rounded-full bg-sheepong-orange/10 flex items-center justify-center text-sheepong-orange text-2xl mr-4">
+                            🌐
+                        </div>
+                        <h2 class="text-3xl font-bold text-sheepong-blue">Online Privacy Policy Only</h2>
+                    </div>
+
+                    <p class="text-lg text-gray-700 mb-6">
+                        This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they share and/or collect on Sheepong: Match-3 Adventure. This policy does not apply to any information collected offline or via channels other than this website.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-sheepong-blue text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="w-10 h-10 rounded-full bg-sheepong-orange flex items-center justify-center text-white text-2xl mr-3">
+                        🐑
+                    </div>
+                    <span class="text-white font-bold text-xl">Sheepong: Match-3 Adventure</span>
+                </div>
+
+            </div>
+
+            <div class="border-t border-sheepong-blue-600 pt-8 pb-4">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-sm text-gray-300 mb-4 md:mb-0">
+                        © 2025 Sheepong: Match-3 Adventure. All rights reserved.
+                    </p>
+                    <div class="flex flex-wrap justify-center space-x-4">
+                        <a href="/Policy356/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Privacy Policy</a>
+                        <a href="/Service347/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Terms of Service</a>
+                        <a href="/Cookie992/" class="text-sm text-gray-300 hover:text-white transition duration-300 mb-2 md:mb-0">Cookie Policy</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-sheepong-orange text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <!-- Simple JavaScript (minimal) -->
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Smooth Scrolling for Navigation Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu after clicking
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+
+        // Simple animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .gallery-image');
+
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+
+                if (elementPosition < screenPosition) {
+                    element.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+
+        // Add a simple Easter egg
+        let sheepCounter = 0;
+        const sheepEgg = () => {
+            sheepCounter++;
+            if (sheepCounter === 5) {
+                console.log("Baa! You found Sheepong's secret!");
+                const egg = document.createElement('div');
+                egg.classList.add('fixed', 'bottom-20', 'left-6', 'text-4xl', 'animate-bounce');
+                egg.innerHTML = '🐑';
+                document.body.appendChild(egg);
+
+                setTimeout(() => {
+                    egg.classList.add('transition-all', 'duration-1000', 'opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(egg);
+                    }, 1000);
+                }, 5000);
+
+                sheepCounter = 0;
+            }
+        };
+
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('click', sheepEgg);
+        });
+    </script>
+
+    <?php include '../cookie-consent.php'; ?>
+</body>
+
+</html>
